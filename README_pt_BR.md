@@ -1,4 +1,4 @@
-# 📦 Satri App - Gerenciador de Produtos
+# 📦 Santri App - Gerenciador de Produtos
 
 Um aplicativo Flutter para Android que permite aos usuários cadastrar, listar e ordenar produtos. O projeto foi construído aplicando rigorosamente os princípios de **Clean Architecture**, **SOLID** e **Clean Code**, com destaque para a implementação de um **algoritmo de ordenação próprio (Quick Sort)** e um **sistema de caching local**.
 
