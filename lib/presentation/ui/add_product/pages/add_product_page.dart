@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:satri/domain/entities/product/product_entity.dart';
-import 'package:satri/presentation/bloc/products_cubit.dart';
-import 'package:satri/presentation/ui/add_product/widgets/add_product_body_widget.dart';
+import 'package:santri/domain/entities/product/product_entity.dart';
+import 'package:santri/presentation/bloc/products_cubit.dart';
+import 'package:santri/presentation/ui/add_product/widgets/add_product_body_widget.dart';
 import 'package:uuid/uuid.dart';
 
 class AddProductPage extends StatefulWidget {
@@ -59,9 +59,12 @@ class _AddProductPageState extends State<AddProductPage> {
   bool _isFormValid() => _formKey.currentState?.validate() ?? false;
 
   void _showInvalidPricesMessage() {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Por favor, insira valores numéricos válidos.'), backgroundColor: Colors.red));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Por favor, insira valores numéricos válidos.'),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   ProductEntity? _createProductFromForm() {
@@ -80,7 +83,9 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  double? _parsePrice(String value) => double.tryParse(value.replaceAll(',', '.'));
+  double? _parsePrice(String value) =>
+      double.tryParse(value.replaceAll(',', '.'));
 
-  bool _hasInvalidPrices(double? purchasePrice, double? sellingPrice) => purchasePrice == null || sellingPrice == null;
+  bool _hasInvalidPrices(double? purchasePrice, double? sellingPrice) =>
+      purchasePrice == null || sellingPrice == null;
 }

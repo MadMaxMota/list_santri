@@ -1,7 +1,7 @@
-import 'package:satri/domain/entities/either_of/either_of.dart';
-import 'package:satri/domain/entities/error/failure.dart';
-import 'package:satri/domain/entities/product/product_entity.dart';
-import 'package:satri/domain/repositories/product_repository.dart';
+import 'package:santri/domain/entities/either_of/either_of.dart';
+import 'package:santri/domain/entities/error/failure.dart';
+import 'package:santri/domain/entities/product/product_entity.dart';
+import 'package:santri/domain/repositories/product_repository.dart';
 
 class AddProductUseCase {
   final ProductRepository repository;

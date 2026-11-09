@@ -1,13 +1,15 @@
-import 'package:satri/data/data_sources/local/product_local_data_source.dart';
-import 'package:satri/domain/entities/base/paginated_response.dart';
-import 'package:satri/domain/entities/product/product_entity.dart';
+import 'package:santri/data/data_sources/local/product_local_data_source.dart';
+import 'package:santri/domain/entities/base/paginated_response.dart';
+import 'package:santri/domain/entities/product/product_entity.dart';
 
 class ProductLocalDataSourceImpl implements ProductLocalDataSource {
-  final Map<int, _CacheEntry<PaginatedResponse<ProductEntity>>> _cacheMap = <int, _CacheEntry<PaginatedResponse<ProductEntity>>>{};
+  final Map<int, _CacheEntry<PaginatedResponse<ProductEntity>>> _cacheMap =
+      <int, _CacheEntry<PaginatedResponse<ProductEntity>>>{};
 
   @override
   Future<PaginatedResponse<ProductEntity>?> getProducts({required int page}) {
-    final _CacheEntry<PaginatedResponse<ProductEntity>>? entry = _cacheMap[page];
+    final _CacheEntry<PaginatedResponse<ProductEntity>>? entry =
+        _cacheMap[page];
 
     if (_hasNoCacheEntry(entry)) {
       return Future.value(null);
@@ -21,11 +23,18 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
     return Future.value(entry.data);
   }
 
-  bool _hasNoCacheEntry(_CacheEntry<PaginatedResponse<ProductEntity>>? entry) => entry == null;
+  bool _hasNoCacheEntry(_CacheEntry<PaginatedResponse<ProductEntity>>? entry) =>
+      entry == null;
 
   @override
-  Future<void> saveProducts({required int page, required PaginatedResponse<ProductEntity> response}) {
-    _cacheMap[page] = _CacheEntry<PaginatedResponse<ProductEntity>>(data: response, cachedAt: DateTime.now());
+  Future<void> saveProducts({
+    required int page,
+    required PaginatedResponse<ProductEntity> response,
+  }) {
+    _cacheMap[page] = _CacheEntry<PaginatedResponse<ProductEntity>>(
+      data: response,
+      cachedAt: DateTime.now(),
+    );
 
     return Future.value();
   }

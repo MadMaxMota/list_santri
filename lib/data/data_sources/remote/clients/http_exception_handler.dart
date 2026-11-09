@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:satri/domain/entities/error/failure.dart';
+import 'package:santri/domain/entities/error/failure.dart';
 
 mixin HttpExceptionHandler {
   Failure handleError(Object e) {
@@ -11,7 +11,10 @@ mixin HttpExceptionHandler {
     final String? serverMessage = _extractMessageFromResponse(dex);
 
     if (statusCode != null) {
-      final Failure? byStatus = _handleErrorByStatusCode(statusCode, serverMessage);
+      final Failure? byStatus = _handleErrorByStatusCode(
+        statusCode,
+        serverMessage,
+      );
       if (byStatus != null) return byStatus;
     }
 

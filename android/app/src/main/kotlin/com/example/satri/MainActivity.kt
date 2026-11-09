@@ -1,4 +1,4 @@
-package com.example.satri
+package com.example.santri
 
 import io.flutter.embedding.android.FlutterActivity
 

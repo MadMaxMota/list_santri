@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:satri/presentation/bloc/products_cubit.dart';
-import 'package:satri/presentation/ui/add_product/widgets/product_form_fields_widget.dart';
-import 'package:satri/presentation/ui/add_product/widgets/submit_button_widget.dart';
+import 'package:santri/presentation/bloc/products_cubit.dart';
+import 'package:santri/presentation/ui/add_product/widgets/product_form_fields_widget.dart';
+import 'package:santri/presentation/ui/add_product/widgets/submit_button_widget.dart';
 
 class AddProductBodyWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -25,15 +25,20 @@ class AddProductBodyWidget extends StatelessWidget {
     return BlocListener<ProductsCubit, ProductsState>(
       listener: (context, state) {
         if (state is ProductAddSuccess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Produto cadastrado com sucesso!'), backgroundColor: Colors.green));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Produto cadastrado com sucesso!'),
+              backgroundColor: Colors.green,
+            ),
+          );
           context.read<ProductsCubit>().resetProductAddState();
           Navigator.pop(context);
         }
 
         if (state is ProductAddError) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
           context.read<ProductsCubit>().resetProductAddState();
         }
       },

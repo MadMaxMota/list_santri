@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:satri/domain/entities/base/paginated_response.dart';
-import 'package:satri/domain/entities/either_of/either_of.dart';
-import 'package:satri/domain/entities/error/failure.dart';
-import 'package:satri/domain/entities/product/product_entity.dart';
-import 'package:satri/domain/use_cases/add_product_use_case.dart';
-import 'package:satri/domain/use_cases/get_products_use_case.dart';
-import 'package:satri/domain/use_cases/sort_products_use_case.dart';
+import 'package:santri/domain/entities/base/paginated_response.dart';
+import 'package:santri/domain/entities/either_of/either_of.dart';
+import 'package:santri/domain/entities/error/failure.dart';
+import 'package:santri/domain/entities/product/product_entity.dart';
+import 'package:santri/domain/use_cases/add_product_use_case.dart';
+import 'package:santri/domain/use_cases/get_products_use_case.dart';
+import 'package:santri/domain/use_cases/sort_products_use_case.dart';
 
 part 'products_state.dart';
 
@@ -14,7 +14,11 @@ class ProductsCubit extends Cubit<ProductsState> {
   final GetProductsUseCase getProducts;
   final SortProductsUseCase sortProducts;
 
-  ProductsCubit({required this.addProductUseCase, required this.getProducts, required this.sortProducts}) : super(ProductsInitial());
+  ProductsCubit({
+    required this.addProductUseCase,
+    required this.getProducts,
+    required this.sortProducts,
+  }) : super(ProductsInitial());
 
   ProductSortCriteria get _currentCriteria {
     if (state is ProductsLoaded) {
@@ -28,7 +32,8 @@ class ProductsCubit extends Cubit<ProductsState> {
       return;
     }
 
-    final PaginatedResponse<ProductEntity>? currentResponse = _getCurrentProductsResponse();
+    final PaginatedResponse<ProductEntity>? currentResponse =
+        _getCurrentProductsResponse();
 
     if (currentResponse == null) {
       return;
@@ -36,11 +41,18 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     emit(ProductAdding(currentResponse: currentResponse));
 
-    final EitherOf<Failure, void> result = await addProductUseCase.call(product: product);
+    final EitherOf<Failure, void> result = await addProductUseCase.call(
+      product: product,
+    );
 
     result.fold(
       (Failure failure) {
-        emit(ProductAddError(currentResponse: currentResponse, message: failure.message ?? 'Não foi possível adicionar o produto.'));
+        emit(
+          ProductAddError(
+            currentResponse: currentResponse,
+            message: failure.message ?? 'Não foi possível adicionar o produto.',
+          ),
+        );
       },
       (_) {
         emit(ProductAddSuccess(currentResponse: currentResponse));
@@ -57,7 +69,12 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
 
     if (currentState is ProductAddError) {
-      emit(ProductsLoaded(currentResponse: currentState.currentResponse, isLoadingMore: false));
+      emit(
+        ProductsLoaded(
+          currentResponse: currentState.currentResponse,
+          isLoadingMore: false,
+        ),
+      );
     }
   }
 
@@ -82,17 +99,27 @@ class ProductsCubit extends Cubit<ProductsState> {
   Future<void> loadInitialProducts() async {
     emit(ProductsLoading());
 
-    final EitherOf<Failure, PaginatedResponse<ProductEntity>> result = await getProducts.call(page: 1);
+    final EitherOf<Failure, PaginatedResponse<ProductEntity>> result =
+        await getProducts.call(page: 1);
 
     result.fold(
       (Failure failure) {
         emit(ProductsError());
       },
       (PaginatedResponse<ProductEntity> response) {
-        final sortedItems = sortProducts(productsList: response.itemsList, sortCriteria: _currentCriteria);
+        final sortedItems = sortProducts(
+          productsList: response.itemsList,
+          sortCriteria: _currentCriteria,
+        );
         final sortedResponse = response.copyWith(itemsList: sortedItems);
 
-        emit(ProductsLoaded(currentResponse: sortedResponse, isLoadingMore: false, sortCriteria: _currentCriteria));
+        emit(
+          ProductsLoaded(
+            currentResponse: sortedResponse,
+            isLoadingMore: false,
+            sortCriteria: _currentCriteria,
+          ),
+        );
       },
     );
   }
@@ -110,21 +137,32 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     final int nextPage = currentState.currentResponse.currentPage + 1;
 
-    final EitherOf<Failure, PaginatedResponse<ProductEntity>> result = await getProducts.call(
-      page: nextPage,
-      currentResponse: currentState.currentResponse,
-    );
+    final EitherOf<Failure, PaginatedResponse<ProductEntity>> result =
+        await getProducts.call(
+          page: nextPage,
+          currentResponse: currentState.currentResponse,
+        );
 
     result.fold(
       (Failure failure) {
         emit(currentState.copyWith(isLoadingMore: false));
       },
       (PaginatedResponse<ProductEntity> response) {
-        final List<ProductEntity> sortedItemsList = sortProducts(productsList: response.itemsList, sortCriteria: currentState.sortCriteria);
+        final List<ProductEntity> sortedItemsList = sortProducts(
+          productsList: response.itemsList,
+          sortCriteria: currentState.sortCriteria,
+        );
 
-        final PaginatedResponse<ProductEntity> sortedResponse = response.copyWith(itemsList: sortedItemsList);
+        final PaginatedResponse<ProductEntity> sortedResponse = response
+            .copyWith(itemsList: sortedItemsList);
 
-        emit(ProductsLoaded(currentResponse: sortedResponse, isLoadingMore: false, sortCriteria: currentState.sortCriteria));
+        emit(
+          ProductsLoaded(
+            currentResponse: sortedResponse,
+            isLoadingMore: false,
+            sortCriteria: currentState.sortCriteria,
+          ),
+        );
       },
     );
   }
@@ -136,10 +174,21 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     if (currentState.sortCriteria == criteria) return;
 
-    final List<ProductEntity> sortedItemsList = sortProducts(productsList: currentState.currentResponse.itemsList, sortCriteria: criteria);
+    final List<ProductEntity> sortedItemsList = sortProducts(
+      productsList: currentState.currentResponse.itemsList,
+      sortCriteria: criteria,
+    );
 
-    final PaginatedResponse<ProductEntity> sortedResponse = currentState.currentResponse.copyWith(itemsList: sortedItemsList);
+    final PaginatedResponse<ProductEntity> sortedResponse = currentState
+        .currentResponse
+        .copyWith(itemsList: sortedItemsList);
 
-    emit(ProductsLoaded(currentResponse: sortedResponse, isLoadingMore: currentState.isLoadingMore, sortCriteria: criteria));
+    emit(
+      ProductsLoaded(
+        currentResponse: sortedResponse,
+        isLoadingMore: currentState.isLoadingMore,
+        sortCriteria: criteria,
+      ),
+    );
   }
 }

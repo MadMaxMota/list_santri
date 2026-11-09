@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:satri/domain/entities/base/paginated_response.dart';
-import 'package:satri/domain/entities/product/product_entity.dart';
-import 'package:satri/presentation/ui/products_list/widgets/product_card_widget.dart';
+import 'package:santri/domain/entities/base/paginated_response.dart';
+import 'package:santri/domain/entities/product/product_entity.dart';
+import 'package:santri/presentation/ui/products_list/widgets/product_card_widget.dart';
 
 class ProductListWidget extends StatelessWidget {
   final PaginatedResponse<ProductEntity> response;
   final ScrollController scrollController;
 
-  const ProductListWidget({super.key, required this.response, required this.scrollController});
+  const ProductListWidget({
+    super.key,
+    required this.response,
+    required this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context) {
