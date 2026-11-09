@@ -1,4 +1,4 @@
-# 📦 Satri App - Product Manager
+# 📦 Santri App - Product Manager
 
 A Flutter application for Android that allows users to register, list, and sort products. The project was built by rigorously applying the principles of **Clean Architecture**, **SOLID**, and **Clean Code**, with a highlight on the implementation of a **custom sorting algorithm (Quick Sort)** and a **local caching system**.
 
